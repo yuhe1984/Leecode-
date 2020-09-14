@@ -1105,25 +1105,86 @@
 # b = a.repeatedSubstringPattern('abcabcabc')
 # print(b)
 
-import collections
+# import collections
 
+# class Solution:
+#     def findItinerary(self, tickets):
+#         paths = collections.defaultdict(list)
+#         for start, tar in tickets:
+#             paths[start].append(tar)
+#         for start in paths:
+#             paths[start].sort(reverse=True)
+#         s = []
+
+#         def search(start):
+#             while paths[start]:
+#                 search(paths[start].pop())
+#             s.append(start)
+
+#         search("JFK")
+#         return s[::-1]
+
+# a = Solution()
+# b = a.findItinerary([["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]])
+# print(b)
+
+
+# num = [5, 3, 2]
+# n, k, d = num[0], num[1], num[2]
+# nums = list(range(1, k+1))
+
+# class Solution():
+#     def helper(self, nums, target, d):
+#         path = []
+#         size = len(nums) - 1
+#         res = []
+#         dic = {}
+#         def dfs(nums, begin, size, path, res, target, dic):
+#             if target == 0:
+#                 if max(path) >= d:
+#                     res.append(path[:])
+#                     return 1
+#             elif target < nums[0]:
+#                 return 0
+#             count = 0
+#             for index in range(size, begin-1, -1):
+#                 resduie = target - nums[index]
+# #                 if resduie < 0:
+# #                     break
+#                 if resduie not in dic:
+#                     path.append(nums[index])
+#                     cur = dfs(nums, begin, size, path, res, resduie, dic)
+#                     dic[resduie] = cur
+#                     count += cur
+#                     path.pop()
+#                 else:
+#                     count += dic[resduie]
+#             return count
+#         count = dfs(nums, 0, size, path, res, target, dic)
+#         return count
+
+# a = Solution()
+# b = a.helper(nums, n, d)
+# print(b%998244353)
+
+import functools
 class Solution:
-    def findItinerary(self, tickets):
-        paths = collections.defaultdict(list)
-        for start, tar in tickets:
-            paths[start].append(tar)
-        for start in paths:
-            paths[start].sort(reverse=True)
-        s = []
-
-        def search(start):
-            while paths[start]:
-                search(paths[start].pop())
-            s.append(start)
-
-        search("JFK")
-        return s[::-1]
+    def combinationSum4(self, nums, target):
+        n = len(nums)
+        nums.sort()
+        @functools.lru_cache(None)
+        def helper(res):
+            if res == target:
+                return 1
+            ans = 0
+            for i in range(n):
+                val = res + nums[i]
+                if val > target:
+                    break
+                ans += helper(val)
+            return ans
+        return helper(0)
 
 a = Solution()
-b = a.findItinerary([["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]])
+b = a.combinationSum4([1,2,3], 5)
 print(b)
